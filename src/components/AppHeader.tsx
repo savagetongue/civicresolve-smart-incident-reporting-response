@@ -26,7 +26,9 @@ export function AppHeader() {
             <NavLinks className="flex items-center gap-6" />
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="hidden md:inline-flex">Login</Button>
+            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+              <Link to="/dashboard">Authority Portal</Link>
+            </Button>
             <ThemeToggle className="relative top-0 right-0" />
             <div className="md:hidden">
               <Sheet>
@@ -43,7 +45,9 @@ export function AppHeader() {
                       <span>CivicResolve</span>
                     </Link>
                     <NavLinks className="flex flex-col items-start gap-4 text-lg" />
-                    <Button variant="outline">Login</Button>
+                    <Button asChild variant="outline">
+                      <Link to="/dashboard">Authority Portal</Link>
+                    </Button>
                   </div>
                 </SheetContent>
               </Sheet>

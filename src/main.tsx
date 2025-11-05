@@ -15,6 +15,8 @@ import { HomePage } from '@/pages/HomePage'
 import { SubmitReportPage } from '@/pages/SubmitReportPage';
 import { IncidentsListPage } from '@/pages/IncidentsListPage';
 import { IncidentDetailPage } from '@/pages/IncidentDetailPage';
+import { DashboardLayout } from '@/pages/dashboard/DashboardLayout';
+import { AuthorityDashboardPage } from '@/pages/dashboard/AuthorityDashboardPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -37,6 +39,17 @@ const router = createBrowserRouter([
     element: <IncidentDetailPage />,
     errorElement: <RouteErrorBoundary />,
   },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    errorElement: <RouteErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <AuthorityDashboardPage />,
+      }
+    ]
+  }
 ]);
 // Do not touch this code
 createRoot(document.getElementById('root')!).render(

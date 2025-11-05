@@ -10,6 +10,12 @@ export interface IncidentCategory {
 }
 export type IncidentStatus = 'Submitted' | 'Acknowledged' | 'In Progress' | 'Resolved' | 'Closed';
 export const ALL_STATUSES: IncidentStatus[] = ['Submitted', 'Acknowledged', 'In Progress', 'Resolved', 'Closed'];
+export interface AuditEntry {
+  status: IncidentStatus;
+  timestamp: string; // ISO 8601
+  updatedBy: string; // e.g., 'Citizen Reporter', 'System', 'Authority User'
+  notes?: string;
+}
 export interface Incident {
   id: string;
   title: string;
@@ -25,4 +31,5 @@ export interface Incident {
   createdAt: string; // ISO 8601
   updatedAt: string; // ISO 8601
   reporterId?: string;
+  auditLog: AuditEntry[];
 }

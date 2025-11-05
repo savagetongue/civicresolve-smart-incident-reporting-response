@@ -18,7 +18,7 @@ import { useState } from "react";
 const reportSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
   description: z.string().min(20, "Description must be at least 20 characters long."),
-  categoryId: z.string({ required_error: "Please select a category." }),
+  categoryId: z.string().min(1, "Please select a category."),
   imageUrl: z.string().url("Please enter a valid image URL.").optional().or(z.literal('')),
 });
 type ReportFormValues = z.infer<typeof reportSchema>;
@@ -36,7 +36,7 @@ export function SubmitReportPage() {
     queryFn: () => api('/api/categories'),
   });
   const mutation = useMutation({
-    mutationFn: (newIncident: Omit<Incident, 'id' | 'status' | 'createdAt' | 'updatedAt'>) =>
+    mutationFn: (newIncident: Omit<Incident, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'auditLog'>) =>
       api<Incident>('/api/incidents', {
         method: 'POST',
         body: JSON.stringify(newIncident),
@@ -55,7 +55,12 @@ export function SubmitReportPage() {
       toast.error("Please provide your location.");
       return;
     }
-    mutation.mutate({ ...values, location });
+    const submissionData = {
+      ...values,
+      imageUrl: values.imageUrl || undefined,
+      location,
+    };
+    mutation.mutate(submissionData);
   }
   function handleGetLocation() {
     setIsLocating(true);

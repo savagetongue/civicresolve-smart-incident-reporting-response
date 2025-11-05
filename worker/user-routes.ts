@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import type { Env } from './core-utils';
 import { IncidentCategoryEntity, IncidentEntity } from "./entities";
-import { ok, bad, notFound, isStr } from './core-utils';
-import type { Incident, IncidentStatus } from "@shared/types";
+import { ok, bad, notFound } from './core-utils';
+import type { Incident, IncidentStatus, AuditEntry } from "@shared/types";
 import { z } from 'zod';
 const incidentCreateSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
@@ -14,6 +14,9 @@ const incidentCreateSchema = z.object({
     address: z.string().optional(),
   }),
   imageUrl: z.string().url().optional(),
+});
+const statusUpdateSchema = z.object({
+  status: z.enum(['Submitted', 'Acknowledged', 'In Progress', 'Resolved', 'Closed']),
 });
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   // CATEGORIES
@@ -41,10 +44,16 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const body = await c.req.json();
     const validation = incidentCreateSchema.safeParse(body);
     if (!validation.success) {
-      return bad(c, validation.error.errors.map(e => e.message).join(', '));
+      return bad(c, validation.error.issues.map((e: { message: string; }) => e.message).join(', '));
     }
     const { title, description, categoryId, location, imageUrl } = validation.data;
     const now = new Date().toISOString();
+    const initialAuditEntry: AuditEntry = {
+      status: 'Submitted',
+      timestamp: now,
+      updatedBy: 'Citizen Reporter',
+      notes: 'Initial report submitted.',
+    };
     const newIncident: Incident = {
       id: crypto.randomUUID(),
       title,
@@ -55,8 +64,23 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       status: 'Submitted',
       createdAt: now,
       updatedAt: now,
+      auditLog: [initialAuditEntry],
     };
     const created = await IncidentEntity.create(c.env, newIncident);
     return ok(c, created);
+  });
+  app.put('/api/incidents/:id/status', async (c) => {
+    const id = c.req.param('id');
+    const body = await c.req.json();
+    const validation = statusUpdateSchema.safeParse(body);
+    if (!validation.success) {
+      return bad(c, validation.error.issues.map((e: { message: string; }) => e.message).join(', '));
+    }
+    const incident = new IncidentEntity(c.env, id);
+    if (!await incident.exists()) {
+      return notFound(c, 'Incident not found');
+    }
+    const updatedIncident = await incident.updateStatus(validation.data.status, 'Authority');
+    return ok(c, updatedIncident);
   });
 }

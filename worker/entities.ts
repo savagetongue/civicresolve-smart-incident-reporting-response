@@ -1,5 +1,5 @@
 import { IndexedEntity } from "./core-utils";
-import type { Incident, IncidentCategory, IncidentStatus } from "@shared/types";
+import type { Incident, IncidentCategory, IncidentStatus, AuditEntry } from "@shared/types";
 // INCIDENT CATEGORY ENTITY
 const SEED_CATEGORIES: IncidentCategory[] = [
   { id: 'pothole', name: 'Pothole', icon: 'Car' },
@@ -28,8 +28,23 @@ export class IncidentEntity extends IndexedEntity<Incident> {
     location: { lat: 0, lng: 0 },
     createdAt: "",
     updatedAt: "",
+    auditLog: [],
   };
-  async updateStatus(status: IncidentStatus): Promise<Incident> {
-    return this.mutate(s => ({ ...s, status, updatedAt: new Date().toISOString() }));
+  async updateStatus(status: IncidentStatus, updatedBy: string, notes?: string): Promise<Incident> {
+    return this.mutate(s => {
+      const now = new Date().toISOString();
+      const newAuditEntry: AuditEntry = {
+        status,
+        timestamp: now,
+        updatedBy,
+        notes,
+      };
+      return {
+        ...s,
+        status,
+        updatedAt: now,
+        auditLog: [...s.auditLog, newAuditEntry],
+      };
+    });
   }
 }
