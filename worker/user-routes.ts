@@ -14,6 +14,7 @@ const incidentCreateSchema = z.object({
     address: z.string().optional(),
   }),
   imageUrl: z.string().url().optional(),
+  reporterEmail: z.string().email().optional(),
 });
 const statusUpdateSchema = z.object({
   status: z.enum(['Submitted', 'Acknowledged', 'In Progress', 'Resolved', 'Closed']),
@@ -29,7 +30,7 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
   app.get('/api/incidents', async (c) => {
     const cq = c.req.query('cursor');
     const lq = c.req.query('limit');
-    const page = await IncidentEntity.list(c.env, cq ?? null, lq ? Math.max(1, (Number(lq) | 0)) : 20);
+    const page = await IncidentEntity.list(c.env, cq ?? null, lq ? Math.max(1, (Number(lq) | 0)) : 100); // Increased limit for client-side filtering
     // Sort by creation date descending
     page.items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     return ok(c, page);
@@ -46,12 +47,12 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     if (!validation.success) {
       return bad(c, validation.error.issues.map((e: { message: string; }) => e.message).join(', '));
     }
-    const { title, description, categoryId, location, imageUrl } = validation.data;
+    const { title, description, categoryId, location, imageUrl, reporterEmail } = validation.data;
     const now = new Date().toISOString();
     const initialAuditEntry: AuditEntry = {
       status: 'Submitted',
       timestamp: now,
-      updatedBy: 'Citizen Reporter',
+      updatedBy: reporterEmail ? 'Citizen Reporter' : 'Anonymous Reporter',
       notes: 'Initial report submitted.',
     };
     const newIncident: Incident = {
@@ -65,6 +66,7 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       createdAt: now,
       updatedAt: now,
       auditLog: [initialAuditEntry],
+      reporterEmail,
     };
     const created = await IncidentEntity.create(c.env, newIncident);
     return ok(c, created);

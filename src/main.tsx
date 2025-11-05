@@ -18,6 +18,8 @@ import { IncidentDetailPage } from '@/pages/IncidentDetailPage';
 import { DashboardLayout } from '@/pages/dashboard/DashboardLayout';
 import { AuthorityDashboardPage } from '@/pages/dashboard/AuthorityDashboardPage';
 import { AnalyticsPage } from '@/pages/dashboard/AnalyticsPage';
+import { LoginPage } from '@/pages/LoginPage';
+import { MyReportsPage } from '@/pages/MyReportsPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -38,6 +40,16 @@ const router = createBrowserRouter([
   {
     path: "/incidents/:id",
     element: <IncidentDetailPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/my-reports",
+    element: <MyReportsPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

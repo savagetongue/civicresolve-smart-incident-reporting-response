@@ -29,6 +29,7 @@ export class IncidentEntity extends IndexedEntity<Incident> {
     createdAt: "",
     updatedAt: "",
     auditLog: [],
+    reporterEmail: "",
   };
   async updateStatus(status: IncidentStatus, updatedBy: string, notes?: string): Promise<Incident> {
     return this.mutate(s => {

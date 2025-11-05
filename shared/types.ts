@@ -31,5 +31,6 @@ export interface Incident {
   createdAt: string; // ISO 8601
   updatedAt: string; // ISO 8601
   reporterId?: string;
+  reporterEmail?: string;
   auditLog: AuditEntry[];
 }

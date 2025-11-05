@@ -15,6 +15,7 @@ import { api } from "@/lib/api-client";
 import type { Incident, IncidentCategory } from "@shared/types";
 import { Loader2, MapPin } from "lucide-react";
 import { useState } from "react";
+import { useAuthStore } from "@/stores/authStore";
 const reportSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
   description: z.string().min(20, "Description must be at least 20 characters long."),
@@ -25,6 +26,7 @@ type ReportFormValues = z.infer<typeof reportSchema>;
 export function SubmitReportPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const user = useAuthStore(s => s.user);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const form = useForm<ReportFormValues>({
@@ -59,6 +61,7 @@ export function SubmitReportPage() {
       ...values,
       imageUrl: values.imageUrl || undefined,
       location,
+      reporterEmail: user?.email,
     };
     mutation.mutate(submissionData);
   }
