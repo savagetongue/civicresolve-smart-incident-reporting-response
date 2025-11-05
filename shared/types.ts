@@ -3,22 +3,26 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
 }
-
-// Minimal real-world chat example types (shared by frontend and worker)
-export interface User {
+export interface IncidentCategory {
   id: string;
   name: string;
+  icon: string; // lucide-react icon name
 }
-
-export interface Chat {
+export type IncidentStatus = 'Submitted' | 'Acknowledged' | 'In Progress' | 'Resolved' | 'Closed';
+export const ALL_STATUSES: IncidentStatus[] = ['Submitted', 'Acknowledged', 'In Progress', 'Resolved', 'Closed'];
+export interface Incident {
   id: string;
   title: string;
-}
-
-export interface ChatMessage {
-  id: string;
-  chatId: string;
-  userId: string;
-  text: string;
-  ts: number; // epoch millis
+  description: string;
+  imageUrl?: string;
+  status: IncidentStatus;
+  categoryId: string;
+  location: {
+    lat: number;
+    lng: number;
+    address?: string;
+  };
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
+  reporterId?: string;
 }

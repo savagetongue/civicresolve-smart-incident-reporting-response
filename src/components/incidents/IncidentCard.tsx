@@ -7,7 +7,6 @@ import { IncidentStatusBadge } from "./IncidentStatusBadge";
 import type { Incident, IncidentCategory } from "@shared/types";
 import { api } from "@/lib/api-client";
 import { ArrowRight } from "lucide-react";
-import { UpvoteButton } from "./UpvoteButton";
 interface IncidentCardProps {
   incident: Incident;
 }
@@ -31,9 +30,8 @@ export function IncidentCard({ incident }: IncidentCardProps) {
       <CardContent className="flex-grow">
         <p className="text-muted-foreground line-clamp-3">{incident.description}</p>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
-        <UpvoteButton incidentId={incident.id} initialUpvotes={incident.upvotes || 0} />
-        <Button asChild variant="secondary" size="sm" className="group">
+      <CardFooter>
+        <Button asChild variant="secondary" size="sm" className="w-full group">
           <Link to={`/incidents/${incident.id}`}>
             View Details <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
