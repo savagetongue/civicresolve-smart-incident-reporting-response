@@ -34,3 +34,10 @@ export interface Incident {
   reporterEmail?: string;
   auditLog: AuditEntry[];
 }
+export interface Comment {
+  id: string;
+  incidentId: string;
+  authorEmail: string;
+  content: string;
+  createdAt: string; // ISO 8601
+}

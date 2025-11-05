@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IncidentStatusBadge } from "@/components/incidents/IncidentStatusBadge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Calendar, MapPin, Tag, History } from "lucide-react";
+import { CommentSection } from "@/components/incidents/CommentSection";
 export function IncidentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: incident, isLoading, error } = useQuery<Incident>({
@@ -70,6 +71,7 @@ export function IncidentDetailPage() {
                 <p className="text-muted-foreground whitespace-pre-wrap">{incident.description}</p>
               </CardContent>
             </Card>
+            <CommentSection incidentId={incident.id} />
           </div>
           <div className="space-y-6">
             <Card>

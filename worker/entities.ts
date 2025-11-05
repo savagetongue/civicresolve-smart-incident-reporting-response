@@ -1,5 +1,5 @@
 import { IndexedEntity } from "./core-utils";
-import type { Incident, IncidentCategory, IncidentStatus, AuditEntry } from "@shared/types";
+import type { Incident, IncidentCategory, IncidentStatus, AuditEntry, Comment } from "@shared/types";
 // INCIDENT CATEGORY ENTITY
 const SEED_CATEGORIES: IncidentCategory[] = [
   { id: 'pothole', name: 'Pothole', icon: 'Car' },
@@ -48,4 +48,16 @@ export class IncidentEntity extends IndexedEntity<Incident> {
       };
     });
   }
+}
+// COMMENT ENTITY
+export class CommentEntity extends IndexedEntity<Comment> {
+  static readonly entityName = "comment";
+  static readonly indexName = "comments";
+  static readonly initialState: Comment = {
+    id: "",
+    incidentId: "",
+    authorEmail: "",
+    content: "",
+    createdAt: "",
+  };
 }
