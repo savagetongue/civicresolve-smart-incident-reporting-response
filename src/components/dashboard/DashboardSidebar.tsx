@@ -39,13 +39,19 @@ export function DashboardSidebar() {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              <NavLink
+                to="/dashboard/analytics"
+                className={({ isActive }) =>
+                  `flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
+                    isActive
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`
+                }
               >
                 <BarChart3 className="h-5 w-5" />
                 <span className="sr-only">Analytics</span>
-              </Link>
+              </NavLink>
             </TooltipTrigger>
             <TooltipContent side="right">Analytics</TooltipContent>
           </Tooltip>

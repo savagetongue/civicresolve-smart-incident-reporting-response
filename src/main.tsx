@@ -17,6 +17,7 @@ import { IncidentsListPage } from '@/pages/IncidentsListPage';
 import { IncidentDetailPage } from '@/pages/IncidentDetailPage';
 import { DashboardLayout } from '@/pages/dashboard/DashboardLayout';
 import { AuthorityDashboardPage } from '@/pages/dashboard/AuthorityDashboardPage';
+import { AnalyticsPage } from '@/pages/dashboard/AnalyticsPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AuthorityDashboardPage />,
+      },
+      {
+        path: "analytics",
+        element: <AnalyticsPage />,
       }
     ]
   }
