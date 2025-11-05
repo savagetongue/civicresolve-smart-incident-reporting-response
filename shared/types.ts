@@ -33,6 +33,7 @@ export interface Incident {
   reporterId?: string;
   reporterEmail?: string;
   auditLog: AuditEntry[];
+  upvotes?: number;
 }
 export interface Comment {
   id: string;

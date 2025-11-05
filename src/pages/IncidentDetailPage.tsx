@@ -8,8 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IncidentStatusBadge } from "@/components/incidents/IncidentStatusBadge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, Calendar, MapPin, Tag, History } from "lucide-react";
+import { AlertCircle, Calendar, MapPin, Tag, History, ThumbsUp } from "lucide-react";
 import { CommentSection } from "@/components/incidents/CommentSection";
+import { UpvoteButton } from "@/components/incidents/UpvoteButton";
 export function IncidentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: incident, isLoading, error } = useQuery<Incident>({
@@ -100,6 +101,15 @@ export function IncidentDetailPage() {
                     <p className="text-muted-foreground">
                       {incident.location.address || `Lat: ${incident.location.lat.toFixed(5)}, Lng: ${incident.location.lng.toFixed(5)}`}
                     </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <ThumbsUp className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <span className="font-medium">Community Support:</span>
+                    <div className="mt-1">
+                      <UpvoteButton incidentId={incident.id} initialUpvotes={incident.upvotes || 0} />
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -30,6 +30,7 @@ export class IncidentEntity extends IndexedEntity<Incident> {
     updatedAt: "",
     auditLog: [],
     reporterEmail: "",
+    upvotes: 0,
   };
   async updateStatus(status: IncidentStatus, updatedBy: string, notes?: string): Promise<Incident> {
     return this.mutate(s => {
@@ -47,6 +48,12 @@ export class IncidentEntity extends IndexedEntity<Incident> {
         auditLog: [...s.auditLog, newAuditEntry],
       };
     });
+  }
+  async upvote(): Promise<Incident> {
+    return this.mutate(s => ({
+      ...s,
+      upvotes: (s.upvotes || 0) + 1,
+    }));
   }
 }
 // COMMENT ENTITY

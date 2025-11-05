@@ -90,6 +90,7 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       updatedAt: now,
       auditLog: [initialAuditEntry],
       reporterEmail,
+      upvotes: 0,
     };
     const created = await IncidentEntity.create(c.env, newIncident);
     return ok(c, created);
@@ -106,6 +107,15 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       return notFound(c, 'Incident not found');
     }
     const updatedIncident = await incident.updateStatus(validation.data.status, 'Authority');
+    return ok(c, updatedIncident);
+  });
+  app.post('/api/incidents/:id/upvote', async (c) => {
+    const id = c.req.param('id');
+    const incident = new IncidentEntity(c.env, id);
+    if (!await incident.exists()) {
+      return notFound(c, 'Incident not found');
+    }
+    const updatedIncident = await incident.upvote();
     return ok(c, updatedIncident);
   });
   // COMMENTS
