@@ -1,6 +1,6 @@
 # CivicResolve: Smart Incident Reporting & Response
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/savagetongue/civicresolve-smart-incident-reporting-response)
 
 CivicResolve is a modern, citizen-centric platform designed to bridge the gap between the public and local authorities. It empowers individuals to report public incidents—such as potholes, broken streetlights, or public safety concerns—through a simple, intuitive web interface. Each report can include a title, detailed description, category, photos, and precise location data. Upon submission, the system generates a unique trackable ID and notifies the relevant authorities. Authorities are equipped with a powerful dashboard to view, manage, assign, and resolve these incidents. The platform maintains a complete, immutable audit trail for every action and status change, ensuring transparency and accountability.
 
@@ -91,7 +91,7 @@ This project is designed for seamless deployment to Cloudflare.
 
 Alternatively, you can deploy your own version of this project with a single click.
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/savagetongue/civicresolve-smart-incident-reporting-response)
 
 ## Contributing
 
