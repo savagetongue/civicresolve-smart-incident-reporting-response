@@ -111,9 +111,6 @@ export function HomePage() {
           </div>
         </div>
       </div>
-      <footer className="py-6 text-center text-sm text-muted-foreground">
-        Built with ❤️ at Cloudflare
-      </footer>
     </AppLayout>
   );
 }

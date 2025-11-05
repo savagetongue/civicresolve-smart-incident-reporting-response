@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api-client";
 import type { Incident, IncidentCategory } from "@shared/types";
 import { Loader2, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAuthStore } from "@/stores/authStore";
 const reportSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -65,7 +65,7 @@ export function SubmitReportPage() {
     };
     mutation.mutate(submissionData);
   }
-  function handleGetLocation() {
+  const handleGetLocation = useCallback(() => {
     setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -81,7 +81,7 @@ export function SubmitReportPage() {
         setIsLocating(false);
       }
     );
-  }
+  }, []);
   return (
     <AppLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
