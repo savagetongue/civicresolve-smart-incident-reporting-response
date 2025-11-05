@@ -26,7 +26,7 @@ type ReportFormValues = z.infer<typeof reportSchema>;
 export function SubmitReportPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const user = useAuthStore(s => s.user);
+  const userEmail = useAuthStore(s => s.user?.email);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const form = useForm<ReportFormValues>({
@@ -61,7 +61,7 @@ export function SubmitReportPage() {
       ...values,
       imageUrl: values.imageUrl || undefined,
       location,
-      reporterEmail: user?.email,
+      reporterEmail: userEmail,
     };
     mutation.mutate(submissionData);
   }

@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Shield, LayoutDashboard, BarChart3, Settings } from "lucide-react";
+import { Shield, LayoutDashboard, BarChart3, Settings, Users } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -54,6 +54,24 @@ export function DashboardSidebar() {
               </NavLink>
             </TooltipTrigger>
             <TooltipContent side="right">Analytics</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <NavLink
+                to="/dashboard/admin"
+                className={({ isActive }) =>
+                  `flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
+                    isActive
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`
+                }
+              >
+                <Users className="h-5 w-5" />
+                <span className="sr-only">Admin</span>
+              </NavLink>
+            </TooltipTrigger>
+            <TooltipContent side="right">Admin</TooltipContent>
           </Tooltip>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">

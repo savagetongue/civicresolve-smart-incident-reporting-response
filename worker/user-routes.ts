@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { Env } from './core-utils';
 import { IncidentCategoryEntity, IncidentEntity } from "./entities";
 import { ok, bad, notFound } from './core-utils';
-import type { Incident, IncidentStatus, AuditEntry } from "@shared/types";
+import type { Incident, IncidentStatus, AuditEntry, IncidentCategory } from "@shared/types";
 import { z } from 'zod';
 const incidentCreateSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
@@ -19,12 +19,31 @@ const incidentCreateSchema = z.object({
 const statusUpdateSchema = z.object({
   status: z.enum(['Submitted', 'Acknowledged', 'In Progress', 'Resolved', 'Closed']),
 });
+const categoryCreateSchema = z.object({
+  id: z.string().min(3, "ID must be at least 3 characters.").regex(/^[a-z0-9-]+$/, "ID must be lowercase alphanumeric with dashes."),
+  name: z.string().min(3, "Name must be at least 3 characters."),
+  icon: z.string().min(1, "Icon name is required."),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   // CATEGORIES
   app.get('/api/categories', async (c) => {
     await IncidentCategoryEntity.ensureSeed(c.env);
     const { items } = await IncidentCategoryEntity.list(c.env);
     return ok(c, items);
+  });
+  app.post('/api/categories', async (c) => {
+    const body = await c.req.json();
+    const validation = categoryCreateSchema.safeParse(body);
+    if (!validation.success) {
+      return bad(c, validation.error.issues.map((e) => e.message).join(', '));
+    }
+    const newCategory: IncidentCategory = validation.data;
+    const category = new IncidentCategoryEntity(c.env, newCategory.id);
+    if (await category.exists()) {
+      return bad(c, 'Category with this ID already exists.');
+    }
+    const created = await IncidentCategoryEntity.create(c.env, newCategory);
+    return ok(c, created);
   });
   // INCIDENTS
   app.get('/api/incidents', async (c) => {

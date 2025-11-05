@@ -20,6 +20,7 @@ import { AuthorityDashboardPage } from '@/pages/dashboard/AuthorityDashboardPage
 import { AnalyticsPage } from '@/pages/dashboard/AnalyticsPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { MyReportsPage } from '@/pages/MyReportsPage';
+import { AdminPage } from '@/pages/dashboard/AdminPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "analytics",
         element: <AnalyticsPage />,
+      },
+      {
+        path: "admin",
+        element: <AdminPage />,
       }
     ]
   }
